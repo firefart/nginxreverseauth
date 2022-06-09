@@ -110,8 +110,7 @@ func (app *application) logError(w http.ResponseWriter, err error, status int) {
 func (app *application) authHandler(w http.ResponseWriter, r *http.Request) {
 	ip, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
-		app.logError(w, err, http.StatusBadRequest)
-		return
+		ip = r.RemoteAddr
 	}
 
 	for _, d := range app.config.Domains {
