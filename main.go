@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"strings"
 	"syscall"
 	"time"
 
@@ -115,11 +114,10 @@ func (app *application) authHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// first check dynamicdomains
-	for _, d := range app.config.DynamicDomains {
+	for _, d := range app.config.Domains {
 		dynamicIP, err := app.dnsClient.ipLookup(r.Context(), d)
 		if err != nil {
-			app.logError(w, fmt.Errorf("invalid domain %s in condig: %w", d, err), http.StatusInternalServerError)
+			app.logError(w, fmt.Errorf("invalid domain %s in config: %w", d, err), http.StatusInternalServerError)
 			return
 		}
 		for _, i := range dynamicIP {
@@ -131,22 +129,6 @@ func (app *application) authHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// now check reverse
-	hosts, err := app.dnsClient.reverseLookup(r.Context(), ip)
-	if err != nil {
-		app.logError(w, err, http.StatusUnauthorized)
-		return
-	}
-	for _, h := range hosts {
-		for _, h2 := range app.config.ReverseDomains {
-			if h == h2 {
-				app.logger.Infof("allowing client %s with hostnames %s", ip, strings.Join(hosts, ","))
-				w.WriteHeader(http.StatusOK)
-				return
-			}
-		}
-	}
-
-	app.logger.Infof("denying client %s with hostnames %s", ip, strings.Join(hosts, ","))
+	app.logger.Infof("denying client %s", ip)
 	w.WriteHeader(http.StatusUnauthorized)
 }

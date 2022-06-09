@@ -2,11 +2,7 @@
 
 This small webserver can be used with the nginx [http_auth_request_module](https://nginx.org/en/docs/http/ngx_http_auth_request_module.html).
 
-It will do a lookup of the domain in `dynamic_domains` and checks the ip of the requesting client and returns a http 200 if both matches. This way you can use the module with dynamic ips that have dynamic dns entries.
-
-You can also add `reverse_domains` which must reverse resolve to the clients ip adress.
-
-If none of those matches, a 401 status is returned.
+It will do a lookup of the domain in `dynamic_domains` and checks the ip of the requesting client matches the domain ip and returns a http 200 if both matches. This way you can use the module with dynamic ips that have dynamic dns entries.
 
 Example nginx config to use with this:
 

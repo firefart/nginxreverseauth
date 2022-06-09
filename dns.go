@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"net"
-	"strings"
 	"sync"
 	"time"
 )
@@ -55,30 +54,6 @@ func (d *dnsClient) setCacheEntry(ip string, values []string) {
 		names:     values,
 		timestamp: time.Now(),
 	}
-}
-
-func (d *dnsClient) reverseLookup(ctx context.Context, ip string) ([]string, error) {
-	cached := d.getCacheEntry(ip)
-	if cached != nil {
-		return cached, nil
-	}
-
-	ctx2, cancel := context.WithTimeout(ctx, d.timeout)
-	defer cancel()
-
-	addr, err := d.resolver.LookupAddr(ctx2, ip)
-	if err != nil {
-		return nil, err
-	}
-
-	addrsCleaned := make([]string, len(addr))
-	for i := range addr {
-		addrsCleaned[i] = strings.TrimRight(addr[i], ".")
-	}
-
-	d.setCacheEntry(ip, addrsCleaned)
-
-	return addrsCleaned, nil
 }
 
 func (d *dnsClient) ipLookup(ctx context.Context, domain string) ([]string, error) {

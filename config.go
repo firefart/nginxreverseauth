@@ -8,8 +8,7 @@ import (
 )
 
 type configuration struct {
-	ReverseDomains []string `json:"reverse_domains"`
-	DynamicDomains []string `json:"dynamic_domains"`
+	Domains []string `json:"domains"`
 }
 
 func getConfig(f string) (*configuration, error) {
