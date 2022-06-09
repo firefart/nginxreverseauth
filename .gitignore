@@ -1,0 +1,4 @@
+nginxreverseauth
+.vscode/
+config.json
+.env

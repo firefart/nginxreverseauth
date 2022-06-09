@@ -1,0 +1,6 @@
+{
+  "domains": [
+    "localhost",
+    "kubernetes.docker.internal"
+  ]
+}
