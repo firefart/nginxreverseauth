@@ -114,13 +114,31 @@ func (app *application) authHandler(w http.ResponseWriter, r *http.Request) {
 		app.logError(w, err, http.StatusBadRequest)
 		return
 	}
-	hosts, err := app.dnsClient.resolve(r.Context(), ip)
+
+	// first check dynamicdomains
+	for _, d := range app.config.DynamicDomains {
+		dynamicIP, err := app.dnsClient.ipLookup(r.Context(), d)
+		if err != nil {
+			app.logError(w, fmt.Errorf("invalid domain %s in condig: %w", d, err), http.StatusInternalServerError)
+			return
+		}
+		for _, i := range dynamicIP {
+			if i == ip {
+				app.logger.Infof("allowing client %s with hostnames %s", ip, d)
+				w.WriteHeader(http.StatusOK)
+				return
+			}
+		}
+	}
+
+	// now check reverse
+	hosts, err := app.dnsClient.reverseLookup(r.Context(), ip)
 	if err != nil {
 		app.logError(w, err, http.StatusUnauthorized)
 		return
 	}
 	for _, h := range hosts {
-		for _, h2 := range app.config.Domains {
+		for _, h2 := range app.config.ReverseDomains {
 			if h == h2 {
 				app.logger.Infof("allowing client %s with hostnames %s", ip, strings.Join(hosts, ","))
 				w.WriteHeader(http.StatusOK)

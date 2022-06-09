@@ -57,7 +57,7 @@ func (d *dnsClient) setCacheEntry(ip string, values []string) {
 	}
 }
 
-func (d *dnsClient) resolve(ctx context.Context, ip string) ([]string, error) {
+func (d *dnsClient) reverseLookup(ctx context.Context, ip string) ([]string, error) {
 	cached := d.getCacheEntry(ip)
 	if cached != nil {
 		return cached, nil
@@ -79,4 +79,23 @@ func (d *dnsClient) resolve(ctx context.Context, ip string) ([]string, error) {
 	d.setCacheEntry(ip, addrsCleaned)
 
 	return addrsCleaned, nil
+}
+
+func (d *dnsClient) ipLookup(ctx context.Context, domain string) ([]string, error) {
+	cached := d.getCacheEntry(domain)
+	if cached != nil {
+		return cached, nil
+	}
+
+	ctx2, cancel := context.WithTimeout(ctx, d.timeout)
+	defer cancel()
+
+	addr, err := d.resolver.LookupHost(ctx2, domain)
+	if err != nil {
+		return nil, err
+	}
+
+	d.setCacheEntry(domain, addr)
+
+	return addr, nil
 }

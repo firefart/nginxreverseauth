@@ -1,5 +1,8 @@
 {
-  "domains": [
+  "dynamic_domains": [
+    "localhost.xxx.com"
+  ],
+  "reverse_domains": [
     "localhost",
     "kubernetes.docker.internal"
   ]
