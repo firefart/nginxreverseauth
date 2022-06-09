@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -119,6 +120,7 @@ func (app *application) authHandler(w http.ResponseWriter, r *http.Request) {
 			app.logError(w, fmt.Errorf("invalid domain %s in config: %w", d, err), http.StatusInternalServerError)
 			return
 		}
+		app.logger.Debugf("resolved %s to %s", d, strings.Join(dynamicIP, ", "))
 		for _, i := range dynamicIP {
 			if i == ip {
 				app.logger.Infof("allowing client %s with hostnames %s", ip, d)
