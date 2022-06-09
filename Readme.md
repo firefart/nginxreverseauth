@@ -13,10 +13,16 @@ location /private/ {
 }
 
 location = /auth {
-    proxy_pass_request_body off;
-    proxy_set_header Content-Length "";
-    proxy_set_header X-Original-URI $request_uri;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_pass http://localhost:8081;
+  allow 127.0.0.0/8;
+  allow 10.0.0.0/8;
+  allow 172.16.0.0/12;
+  allow 192.168.0.0/16;
+  deny all;
+
+  proxy_pass_request_body off;
+  proxy_set_header Content-Length "";
+  proxy_set_header X-Original-URI $request_uri;
+  proxy_set_header X-Real-IP $remote_addr;
+  proxy_pass http://localhost:8081;
 }
 ```
