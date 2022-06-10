@@ -32,7 +32,7 @@ func main() {
 
 	err := godotenv.Load()
 	if err != nil {
-		log.Warnf("Error loading .env file: %v. continuing without", err)
+		log.Warnf("could not load .env file: %v. continuing without", err)
 	}
 
 	host := flag.String("host", lookupEnvOrString(log, "NGINX_HOST", "127.0.0.1:8080"), "IP and Port to bind to. You can also use the NGINX_HOST environment variable or an entry in the .env file to set this parameter.")
