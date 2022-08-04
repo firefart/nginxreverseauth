@@ -8,4 +8,4 @@ require (
 	github.com/sirupsen/logrus v1.9.0
 )
 
-require golang.org/x/sys v0.0.0-20220731174439-a90be440212d // indirect
+require golang.org/x/sys v0.0.0-20220803195053-6e608f9ce704 // indirect
