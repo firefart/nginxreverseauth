@@ -37,7 +37,7 @@ func main() {
 
 	host := flag.String("host", lookupEnvOrString(log, "NGINX_HOST", "127.0.0.1:8080"), "IP and Port to bind to. You can also use the NGINX_HOST environment variable or an entry in the .env file to set this parameter.")
 	debug := flag.Bool("debug", lookupEnvOrBool(log, "NGINX_DEBUG", false), "Enable DEBUG mode. You can also use the NGINX_DEBUG environment variable or an entry in the .env file to set this parameter.")
-	wait := flag.Duration("graceful-timeout", lookupEnvOrDuration(log, "NGINX_GRACEFUL_TIMEOUT", 2*time.Second), "the duration for which the server gracefully wait for existing connections to finish - e.g. 15s or 1m. You can also use the NGINX_GRACEFUL_TIMEOUT environment variable or an entry in the .env file to set this parameter.")
+	wait := flag.Duration("graceful-timeout", lookupEnvOrDuration(log, "NGINX_GRACEFUL_TIMEOUT", 2*time.Second), "the duration for which the server waits on exit for existing connections to finish - e.g. 15s or 1m. You can also use the NGINX_GRACEFUL_TIMEOUT environment variable or an entry in the .env file to set this parameter.")
 	timeout := flag.Duration("timeout", lookupEnvOrDuration(log, "NGINX_TIMEOUT", 5*time.Second), "dns and http timeout. You can also use the NGINX_TIMEOUT environment variable or an entry in the .env file to set this parameter.")
 	configFile := flag.String("config", lookupEnvOrString(log, "NGINX_CONFIG", "config.json"), "config file to use. You can also use the NGINX_CONFIG environment variable or an entry in the .env file to set this parameter.")
 	flag.Parse()
