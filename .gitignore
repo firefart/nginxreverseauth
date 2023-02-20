@@ -2,3 +2,5 @@ nginxreverseauth
 .vscode/
 config.json
 .env
+
+dist/
